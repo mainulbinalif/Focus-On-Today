@@ -1,0 +1,14 @@
+.completed .custom-checkbox{
+    background-color: #48A300;
+    border-color: #48A300;
+}
+.completed .check-icon{
+    display: block;
+}
+.completed input{
+    color: #48A300;
+    text-decoration-line: line-through;
+}
+.show-error .error-label{
+    visibility: visible;
+}
