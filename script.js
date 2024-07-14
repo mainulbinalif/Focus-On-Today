@@ -5,6 +5,9 @@ const errorText = document.querySelector('.error-label')
 const progressValue = document.querySelector('.progress-value')
 
 const allGoals = JSON.parse(localStorage.getItem('allGoals')) || {}
+let completedGoalsCount = Object.values(allGoals).filter((goal) =>goal.completed).length
+progressValue.style.width = `${completedGoalsCount / 3 * 100}%`
+
 
 checkboxList.forEach((checkbox) =>{
     checkbox.addEventListener('click', (e)=>{
@@ -14,9 +17,12 @@ checkboxList.forEach((checkbox) =>{
         
         if (allGoalsAdded) {
             checkbox.parentElement.classList.toggle('completed')
-            progressValue.style.width = '33%'
             const inputId = checkbox.nextElementSibling.id
-            allGoals[inputId].isCompleted = !allGoals[inputId].isCompleted
+            allGoals[inputId].completed = !allGoals[inputId].completed
+            completedGoalsCount = Object.values(allGoals).filter((goal) =>goal.completed).length
+            progressValue.style.width = `${completedGoalsCount / 3 * 100}%`
+            progressValue.firstElementChild.innerText = `${completedGoalsCount}/3 Completed`
+
             localStorage.setItem('allGoals', JSON.stringify(allGoals))
         }else{
             errorText.classList.remove('invisible')
@@ -28,18 +34,25 @@ checkboxList.forEach((checkbox) =>{
 inputFields.forEach((input) =>{
     input.value = allGoals[input.id].name
 
-    if(allGoals[input.id].isCompleted){
-        input.parentElement.classlist.add('completed')
+    if(allGoals[input.id].completed){
+        input.parentElement.classList.add('completed')
     }
 
     input.addEventListener('focus', () =>{
         errorText.classList.add('invisible')
     })
+
     
-    input.addEventListener('input', () =>{
+    input.addEventListener('input', (e) =>{
+
+        if(allGoals[input.id].completed){
+            e.target.value = allGoals[input.id].name
+            return
+        }
+
         allGoals[input.id] = {
             name: input.value,
-            isCompleted: false
+            completed: false
         }
         localStorage.setItem('allGoals', JSON.stringify(allGoals))
     })
