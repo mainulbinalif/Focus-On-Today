@@ -50,6 +50,8 @@ inputFields.forEach((input) =>{
         input.parentElement.classList.add('completed')
     }
 
+
+    
     input.addEventListener('focus', () =>{
         errorText.classList.add('invisible')
     })
